@@ -70,6 +70,9 @@
 #include "Kaleidoscope-OneShot.h"
 #include "Kaleidoscope-Escape-OneShot.h"
 
+// https://github.com/keyboardio/Kaleidoscope-LED-ActiveModColor
+#include "Kaleidoscope-LED-ActiveModColor.h"
+
 // Support for USB quirks, like changing the key state report protocol
 #include "Kaleidoscope-USB-Quirks.h"
 
@@ -177,14 +180,14 @@ KEYMAPS(
    Key_PageUp,   Key_A, Key_S, Key_D, Key_F, Key_G,
    Key_PageDown, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
    Key_LeftControl, Key_Backspace, Key_LeftGui, OSM(LeftShift),
-   ShiftToLayer(FUNCTION),
+   OSL(FUNCTION),
 
    Key_PrintScreen, Key_6, Key_7, Key_8,     Key_9,         Key_0,         LockLayer(NUMPAD),
    Key_Enter,       Key_Y, Key_U, Key_I,     Key_O,         Key_P,         Key_Equals,
                     Key_H, Key_J, Key_K,     Key_L,         Key_Semicolon, Key_Quote,
    Key_LeftGui,     Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     Key_Minus,
    OSM(RightShift),  Key_LeftAlt, Key_Spacebar, Key_RightControl,
-   ShiftToLayer(FUNCTION)),
+   OSL(FUNCTION)),
 
 #elif defined (PRIMARY_KEYMAP_DVORAK)
 
@@ -492,13 +495,15 @@ KALEIDOSCOPE_INIT_PLUGINS(
   // https://github.com/keyboardio/Kaleidoscope-Escape-OneShot
   OneShot,
   EscapeOneShot,
-  
 
   // The USBQuirks plugin lets you do some things with USB that we aren't
   // comfortable - or able - to do automatically, but can be useful
   // nevertheless. Such as toggling the key report protocol between Boot (used
   // by BIOSes) and Report (NKRO).
-  USBQuirks
+  USBQuirks,
+
+  // https://github.com/keyboardio/Kaleidoscope-LED-ActiveModColor
+  ActiveModColorEffect
 );
 
 /** The 'setup' function is one of the two standard Arduino sketch functions.
