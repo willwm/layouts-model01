@@ -48,6 +48,9 @@
 // Support for an LED mode that makes all the LEDs 'breathe'
 #include "Kaleidoscope-LEDEffect-Breathe.h"
 
+// Digital Rain plugin
+#include <Kaleidoscope-LEDEffect-DigitalRain.h>
+
 // Support for an LED mode that makes a red pixel chase a blue pixel across the keyboard
 //#include "Kaleidoscope-LEDEffect-Chase.h"
 
@@ -450,6 +453,9 @@ KALEIDOSCOPE_INIT_PLUGINS(
   // https://github.com/keyboardio/Kaleidoscope/blob/master/src/kaleidoscope/plugin/Heatmap.h
   // HeatmapEffect,
 
+  // https://github.com/tremby/Kaleidoscope-LEDEffect-DigitalRain
+  LEDDigitalRainEffect,
+
   // The rainbow wave effect lights up your keyboard with all the colors of a rainbow
   // and slowly moves the rainbow across your keyboard
   LEDRainbowWaveEffect,
@@ -504,6 +510,9 @@ KALEIDOSCOPE_INIT_PLUGINS(
 void setup() {
   Qukeys.setTimeout(200);
   Qukeys.setReleaseDelay(20);
+
+  // Optionally adjust the configuration
+  LEDDigitalRainEffect.DROP_TICKS = 22; // Make the rain fall faster
   
   // First, call Kaleidoscope's internal setup function
   Kaleidoscope.setup();
