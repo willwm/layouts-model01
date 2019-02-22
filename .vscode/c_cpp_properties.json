@@ -3,6 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
+                "C:\\Users\\wwolff-myren\\AppData\\Local\\Arduino15\\packages\\keyboardio\\hardware\\avr\\1.94.0-beta\\**",
                 "C:\\Users\\will\\AppData\\Local\\Arduino15\\packages\\keyboardio\\hardware\\avr\\1.94.0-beta\\**"
             ],
             "forcedInclude": [],
