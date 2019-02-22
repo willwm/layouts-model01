@@ -182,14 +182,14 @@ KEYMAPS(
    Key_Backtick, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
    SFT_T(PageUp),   Key_A, Key_S, Key_D, Key_F, Key_G,
    CTL_T(PageDown), Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
-   Key_LeftControl, Key_Backspace, OSM(LeftShift), Key_LeftGui,
+   OSM(LeftControl), Key_Backspace, OSM(LeftShift), Key_LeftGui,
    OSL(FUNCTION),
 
-   Key_PrintScreen, Key_6, Key_7, Key_8,     Key_9,         Key_0,         LockLayer(NUMPAD),
+   Key_Delete,      Key_6, Key_7, Key_8,     Key_9,         Key_0,         LockLayer(NUMPAD),
    Key_Enter,       Key_Y, Key_U, Key_I,     Key_O,         Key_P,         Key_Equals,
                     Key_H, Key_J, Key_K,     Key_L,         Key_Semicolon, SFT_T(Quote),
    Key_LeftGui,     Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     SFT_T(Minus),
-   Key_LeftAlt,   OSM(RightShift),   Key_Spacebar, Key_RightControl,
+   OSM(LeftAlt),    OSM(RightShift),   Key_Spacebar, OSM(RightControl),
    OSL(FUNCTION)),
 
 #elif defined (PRIMARY_KEYMAP_DVORAK)
@@ -259,10 +259,10 @@ KEYMAPS(
    ___, ___, ___, ___,
    ___,
 
-   M(MACRO_VERSION_INFO),  ___, Key_Keypad7, Key_Keypad8,   Key_Keypad9,        Key_KeypadSubtract, ___,
-   ___,                    ___, Key_Keypad4, Key_Keypad5,   Key_Keypad6,        Key_KeypadAdd,      ___,
-                           ___, Key_Keypad1, Key_Keypad2,   Key_Keypad3,        Key_Equals,         ___,
-   ___,                    ___, Key_Keypad0, Key_KeypadDot, Key_KeypadMultiply, Key_KeypadDivide,   Key_Enter,
+   M(MACRO_VERSION_INFO),  ___, Key_Keypad7, Key_Keypad8,     Key_Keypad9,    Key_KeypadSubtract, ___,
+   ___,                    ___, Key_Keypad4, Key_Keypad5,     Key_Keypad6,    Key_KeypadAdd,      ___,
+                           ___, Key_Keypad1, Key_Keypad2,     Key_Keypad3,    Key_KeypadMultiply, ___,
+   ___,                    ___, Key_Keypad0, Key_KeypadComma, Key_KeypadDot,  Key_KeypadDivide,   Key_Enter,
    ___, ___, ___, ___,
    ___),
 
@@ -453,16 +453,12 @@ KALEIDOSCOPE_INIT_PLUGINS(
   // https://github.com/keyboardio/Kaleidoscope/blob/master/src/kaleidoscope/plugin/Heatmap.h
   // HeatmapEffect,
 
-  // https://github.com/tremby/Kaleidoscope-LEDEffect-DigitalRain
-  LEDDigitalRainEffect,
-
   // The rainbow wave effect lights up your keyboard with all the colors of a rainbow
   // and slowly moves the rainbow across your keyboard
   LEDRainbowWaveEffect,
-  
-  // The rainbow effect changes the color of all of the keyboard's keys at the same time
-  // running through all the colors of the rainbow.
-  LEDRainbowEffect,
+
+  // https://github.com/tremby/Kaleidoscope-LEDEffect-DigitalRain
+  LEDDigitalRainEffect,
 
   // These static effects turn your keyboard's LEDs a variety of colors
   solidRed, solidOrange, solidYellow, solidGreen, solidBlue, solidIndigo, solidViolet,
