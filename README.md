@@ -6,6 +6,8 @@ Layouts for Keyboardio Model 01
 **Kaleidoscope Wiki**
 * [Keyboardio Model 01 Introduction · keyboardio/Kaleidoscope Wiki](https://github.com/keyboardio/Kaleidoscope/wiki/Keyboardio-Model-01-Introduction)
 * [EEPROM Customizing Without Programming · keyboardio/Kaleidoscope Wiki](https://github.com/keyboardio/Kaleidoscope/wiki/EEPROM-Customizing-Without-Programming)
+  * [keyboardio/Kaleidoscope-EEPROM-Settings: Basic EEPROM settings plugin for Kaleidoscope](https://github.com/keyboardio/Kaleidoscope-EEPROM-Settings)
+  * [keyboardio/Kaleidoscope-EEPROM-Keymap: EEPROM-based keymap storage for Kaleidoscope](https://github.com/keyboardio/Kaleidoscope-EEPROM-Keymap)
 * [Keycode meanings · keyboardio/Kaleidoscope Wiki](https://github.com/keyboardio/Kaleidoscope/wiki/Keycode-meanings)
 
 **Plugins**
