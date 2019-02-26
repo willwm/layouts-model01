@@ -130,7 +130,7 @@ KEYMAPS(
                     Key_H, Key_J, Key_K,     Key_L,         Key_Semicolon, SFT_T(Quote),
    Key_LeftGui,     Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     SFT_T(Backslash),
    OSM(RightShift), Key_LeftAlt, Key_Spacebar, OSM(RightControl),
-   ShiftToLayer(FUNCTION)),
+   OSL(FUNCTION)),
 
   [NUMPAD] =  KEYMAP_STACKED
   (___, ___, ___, ___, ___, ___, ___,
