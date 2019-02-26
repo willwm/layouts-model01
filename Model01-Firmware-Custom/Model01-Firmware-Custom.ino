@@ -72,10 +72,7 @@ enum { MACRO_VERSION_INFO,
   * defined as part of the USB HID Keyboard specification. You can find the names
   * (if not yet the explanations) for all the standard `Key_` defintions offered by
   * Kaleidoscope in these files:
-  *    https://github.com/keyboardio/Kaleidoscope/blob/master/src/key_defs_keyboard.h
-  *    https://github.com/keyboardio/Kaleidoscope/blob/master/src/key_defs_consumerctl.h
-  *    https://github.com/keyboardio/Kaleidoscope/blob/master/src/key_defs_sysctl.h
-  *    https://github.com/keyboardio/Kaleidoscope/blob/master/src/key_defs_keymaps.h
+  *     https://github.com/keyboardio/Kaleidoscope/tree/master/src/kaleidoscope
   *
   * Additional things that should be documented here include
   *   using ___ to let keypresses fall through to the previously active layer
@@ -132,7 +129,7 @@ KEYMAPS(
    Key_Enter,       Key_Y, Key_U, Key_I,     Key_O,         Key_P,         Key_Equals,
                     Key_H, Key_J, Key_K,     Key_L,         Key_Semicolon, SFT_T(Quote),
    Key_LeftGui,     Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     SFT_T(Backslash),
-   OSM(RightShift), Key_LeftAlt, Key_Spacebar, Key_RightControl,
+   OSM(RightShift), Key_LeftAlt, Key_Spacebar, OSM(RightControl),
    ShiftToLayer(FUNCTION)),
 
   [NUMPAD] =  KEYMAP_STACKED
@@ -143,24 +140,24 @@ KEYMAPS(
    ___, ___, ___, ___,
    ___,
 
-   M(MACRO_VERSION_INFO),  ___, Key_Keypad7, Key_Keypad8,     Key_Keypad9,    Key_KeypadSubtract, ___,
-   ___,                    ___, Key_Keypad4, Key_Keypad5,     Key_Keypad6,    Key_KeypadAdd,      ___,
-                           ___, Key_Keypad1, Key_Keypad2,     Key_Keypad3,    Key_KeypadMultiply, ___,
+   M(MACRO_VERSION_INFO),  ___, Key_Keypad7, Key_Keypad8,     Key_Keypad9,    Key_KeypadSubtract, UnlockLayer(NUMPAD),
+   ___,                    ___, Key_Keypad4, Key_Keypad5,     Key_Keypad6,    Key_KeypadAdd,      Key_KeypadEquals,
+                           ___, Key_Keypad1, Key_Keypad2,     Key_Keypad3,    Key_KeypadMultiply, Key_Insert,
    ___,                    ___, Key_Keypad0, Key_KeypadComma, Key_KeypadDot,  Key_KeypadDivide,   Key_Enter,
    ___, ___, ___, ___,
    ___),
 
   [FUNCTION] =  KEYMAP_STACKED
-  (ShiftToLayer(NUMPAD),       Key_F1,           Key_F2,         Key_F3,         Key_F4,         Key_F5,           Key_LEDEffectNext,
-   Key_Tab,   ___,              Key_Home,       Key_UpArrow,    Key_End,        ___, ___,
-   ___,       ___,              Key_LeftArrow,  Key_DownArrow,  Key_RightArrow, ___,
-   ___,       Key_PrintScreen,  Key_Insert,     ___,            ___, ___,  ___,
+  (___,   Key_F1,           Key_F2,         Key_F3,         Key_F4,         Key_F5,           Key_LEDEffectNext,
+   ___,   LCTRL(Key_Home),  Key_Home,       Key_UpArrow,    Key_End,        LCTRL(Key_End),  ___,
+   ___,   LSHIFT(Key_Home), Key_LeftArrow,  Key_DownArrow,  Key_RightArrow, LSHIFT(Key_End),
+   ___,   Key_PrintScreen,  LGUI(Key_LeftArrow), LGUI(Key_UpArrow), LGUI(Key_RightArrow), Key_Insert,  ___,
    ___, Key_Delete, ___, ___,
    ___,
 
-   Key_LEDEffectPrevious,   Key_F6,           Key_F7,                 Key_F8,                   Key_F9,          Key_F10,          Key_F11,
-   ___,               Key_LeftParen,    Key_LeftCurlyBracket,   Key_RightCurlyBracket,    Key_LeftBracket, Key_RightBracket, Key_F12,
-                      Key_LeftArrow,    Key_DownArrow,          Key_UpArrow,              Key_RightArrow,  LGUI(Key_LeftArrow),  LGUI(Key_RightArrow),
+   Key_LEDEffectPrevious,   Key_F6,           Key_F7,                 Key_F8,                   Key_F9,          Key_F10,          LockLayer(NUMPAD),
+   ___,               Key_LeftParen,    Key_LeftCurlyBracket,   Key_RightCurlyBracket,    Key_LeftBracket, Key_RightBracket, Key_F11,
+                      Key_LeftArrow,    Key_DownArrow,          Key_UpArrow,              Key_RightArrow,  ___,  Key_F12,
    ___,               Key_RightParen,  Consumer_Mute,          Consumer_VolumeDecrement, Consumer_VolumeIncrement, Key_Backslash,    Key_Pipe,
    ___, ___, Key_Enter, ___,
    ___)
