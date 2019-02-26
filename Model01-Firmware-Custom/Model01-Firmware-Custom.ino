@@ -182,15 +182,15 @@ KEYMAPS(
    Key_Backtick, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
    SFT_T(PageUp),   Key_A, Key_S, Key_D, Key_F, Key_G,
    CTL_T(PageDown), Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
-   OSM(LeftShift), Key_Backspace, Key_LeftGui, OSM(LeftControl),
-   OSL(FUNCTION),
+   OSM(LeftControl), Key_Backspace, Key_LeftGui, OSM(LeftShift),
+   ShiftToLayer(FUNCTION),
 
    Key_Delete,      Key_6, Key_7, Key_8,     Key_9,         Key_0,         LockLayer(NUMPAD),
    Key_Enter,       Key_Y, Key_U, Key_I,     Key_O,         Key_P,         Key_Equals,
                     Key_H, Key_J, Key_K,     Key_L,         Key_Semicolon, SFT_T(Quote),
-   Key_LeftGui,     Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     SFT_T(Minus),
-   OSM(LeftAlt),    OSM(RightControl),   Key_Spacebar, OSM(RightShift),
-   OSL(FUNCTION)),
+   Key_LeftGui,     Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     SFT_T(Backslash),
+   OSM(RightShift), Key_LeftAlt, Key_Spacebar, Key_RightControl,
+   ShiftToLayer(FUNCTION)),
 
 #elif defined (PRIMARY_KEYMAP_DVORAK)
 
@@ -509,7 +509,7 @@ void setup() {
 
   // Optionally adjust the configuration
   LEDDigitalRainEffect.DROP_TICKS = 22; // Make the rain fall faster
-  
+
   // First, call Kaleidoscope's internal setup function
   Kaleidoscope.setup();
 
