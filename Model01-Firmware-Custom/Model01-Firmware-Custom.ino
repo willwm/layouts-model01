@@ -148,17 +148,17 @@ KEYMAPS(
    ___),
 
   [FUNCTION] =  KEYMAP_STACKED
-  (___,   Key_F1,           Key_F2,         Key_F3,         Key_F4,         Key_F5,           Key_LEDEffectNext,
-   ___,   LCTRL(Key_Home),  Key_Home,       Key_UpArrow,    Key_End,        LCTRL(Key_End),  ___,
-   ___,   LSHIFT(Key_Home), Key_LeftArrow,  Key_DownArrow,  Key_RightArrow, LSHIFT(Key_End),
-   ___,   Key_PrintScreen,  LGUI(Key_LeftArrow), LGUI(Key_UpArrow), LGUI(Key_RightArrow), Key_Insert,  ___,
+  (___,   Key_F1,                       Key_F2,              Key_F3,         Key_F4,               Key_F5,                      Key_LEDEffectNext,
+   ___,   LCTRL(Key_Home),              Key_Home,            Key_UpArrow,    Key_End,              LCTRL(Key_End),              ___,
+   ___,   LSHIFT(Key_Home),             Key_LeftArrow,       Key_DownArrow,  Key_RightArrow,       LSHIFT(Key_End),
+   ___,   LCTRL(LGUI(Key_LeftArrow)),   LGUI(Key_LeftArrow), LGUI(Key_Tab),  LGUI(Key_RightArrow), LCTRL(LGUI(Key_LeftArrow)),  ___,
    ___, Key_Delete, ___, ___,
    ___,
 
-   Key_LEDEffectPrevious,   Key_F6,           Key_F7,                 Key_F8,                   Key_F9,          Key_F10,          LockLayer(NUMPAD),
-   ___,               Key_LeftParen,    Key_LeftCurlyBracket,   Key_RightCurlyBracket,    Key_LeftBracket, Key_RightBracket, Key_F11,
-                      Key_LeftArrow,    Key_DownArrow,          Key_UpArrow,              Key_RightArrow,  ___,  Key_F12,
-   ___,               Key_RightParen,  Consumer_Mute,          Consumer_VolumeDecrement, Consumer_VolumeIncrement, Key_Backslash,    Key_Pipe,
+   Key_LEDEffectPrevious,   Key_F6,          Key_F7,                 Key_F8,                   Key_F9,                    Key_F10,          LockLayer(NUMPAD),
+   ___,                     Key_LeftParen,   Key_LeftCurlyBracket,   Key_RightCurlyBracket,    Key_LeftBracket,           Key_RightBracket, Key_F11,
+                            Key_LeftArrow,   Key_DownArrow,          Key_UpArrow,              Key_RightArrow,            ___,              Key_F12,
+   ___,                     Key_RightParen,  Consumer_Mute,          Consumer_VolumeDecrement, Consumer_VolumeIncrement,  Key_Backslash,    Key_Pipe,
    ___, ___, Key_Enter, ___,
    ___)
 ) // KEYMAPS(
@@ -173,7 +173,7 @@ KEYMAPS(
 
 static void versionInfoMacro(uint8_t keyState) {
   if (keyToggledOn(keyState)) {
-    Macros.type(PSTR("Keyboardio Model 01 - Kaleidoscope "));
+    Macros.type(PSTR("Keyboardio Model 01 - Kaleidoscope (https://github.com/willwm/layouts-model01) "));
     Macros.type(PSTR(BUILD_INFORMATION));
   }
 }
