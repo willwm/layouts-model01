@@ -20,7 +20,6 @@
 #include "Kaleidoscope-HostPowerManagement.h"
 #include "Kaleidoscope-Macros.h"
 #include "Kaleidoscope-MagicCombo.h"
-#include "Kaleidoscope-MouseKeys.h"
 #include "Kaleidoscope-NumPad.h"
 #include "Kaleidoscope-OneShot.h"
 #include "Kaleidoscope-Escape-OneShot.h"
@@ -32,7 +31,6 @@
 #include "Kaleidoscope-Colormap.h"
 #include "Kaleidoscope-LEDEffect-BootGreeting.h"
 #include "Kaleidoscope-LEDEffect-Breathe.h"
-#include "Kaleidoscope-LEDEffect-Chase.h"
 #include "Kaleidoscope-LEDEffect-Rainbow.h"
 #include "Kaleidoscope-LEDEffect-SolidColor.h"
 #include "Kaleidoscope-LED-ActiveModColor.h"
@@ -58,43 +56,6 @@ enum
   MACRO_ANY
 };
 
-/** The Model 01's key layouts are defined as 'keymaps'. By default, there are three
-  * keymaps: The standard QWERTY keymap, the "Function layer" keymap and the "Numpad"
-  * keymap.
-  *
-  * Each keymap is defined as a list using the 'KEYMAP_STACKED' macro, built
-  * of first the left hand's layout, followed by the right hand's layout.
-  *
-  * Keymaps typically consist mostly of `Key_` definitions. There are many, many keys
-  * defined as part of the USB HID Keyboard specification. You can find the names
-  * (if not yet the explanations) for all the standard `Key_` defintions offered by
-  * Kaleidoscope in these files:
-  *     https://github.com/keyboardio/Kaleidoscope/tree/master/src/kaleidoscope
-  *
-  * Additional things that should be documented here include
-  *   using ___ to let keypresses fall through to the previously active layer
-  *   using XXX to mark a keyswitch as 'blocked' on this layer
-  *   using ShiftToLayer() and LockLayer() keys to change the active keymap.
-  *   keeping NUM and FN consistent and accessible on all layers
-  *
-  * The PROG key is special, since it is how you indicate to the board that you
-  * want to flash the firmware. However, it can be remapped to a regular key.
-  * When the keyboard boots, it first looks to see whether the PROG key is held
-  * down; if it is, it simply awaits further flashing instructions. If it is
-  * not, it continues loading the rest of the firmware and the keyboard
-  * functions normally, with whatever binding you have set to PROG. More detail
-  * here: https://community.keyboard.io/t/how-the-prog-key-gets-you-into-the-bootloader/506/8
-  *
-  * The "keymaps" data structure is a list of the keymaps compiled into the firmware.
-  * The order of keymaps in the list is important, as the ShiftToLayer(#) and LockLayer(#)
-  * macros switch to key layers based on this list.
-  *
-  *
-
-  * A key defined as 'ShiftToLayer(FUNCTION)' will switch to FUNCTION while held.
-  * Similarly, a key defined as 'LockLayer(NUMPAD)' will switch to NUMPAD when tapped.
-  */
-
 /**
   * Layers are "0-indexed" -- That is the first one is layer 0. The second one is layer 1.
   * The third one is layer 2.
@@ -117,6 +78,8 @@ enum
 
 #define Key_Grave       Key_Backtick
 #define Key_PrtSc       Key_PrintScreen
+#define Key_Del         Key_Delete
+#define Key_BkSp        Key_Backspace
 
 #define Key_LCurly      Key_LeftCurlyBracket
 #define Key_RCurly      Key_RightCurlyBracket
@@ -128,18 +91,17 @@ enum
 #define Key_LEDNext     Key_LEDEffectNext
 #define Key_LEDPrev     Key_LEDEffectPrevious
 
-#define CtrlAlt(k)      LCTRL(LALT(k))
-#define Key_CtrlAltUp   CtrlAlt(Key_UpArrow)
-#define Key_CtrlAltDn   CtrlAlt(Key_DownArrow)
+#define Key_CtrlAltUp   LCTRL(LALT(Key_UpArrow))
+#define Key_CtrlAltDn   LCTRL(LALT(Key_DownArrow))
 
 
 KEYMAPS(
 
-    [PRIMARY] = KEYMAP_STACKED(Key_Escape,      Key_1, Key_2, Key_3, Key_4, Key_5, Key_Delete,
-                               Key_Grave,       Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
-                               SFT_T(PageUp),   Key_A, Key_S, Key_D, Key_F, Key_G,
-                               CTL_T(PageDown), Key_Z, Key_X, Key_C, Key_V, Key_B, Key_LAlt,
-                               OSM(LeftControl), Key_Backspace, Key_LGui, OSM(LeftShift),
+    [PRIMARY] = KEYMAP_STACKED(Key_Escape,        Key_1,    Key_2,    Key_3, Key_4, Key_5, Key_Del,
+                               Key_Grave,         Key_Q,    Key_W,    Key_E, Key_R, Key_T, Key_Tab,
+                               SFT_T(PageUp),     Key_A,    Key_S,    Key_D, Key_F, Key_G,
+                               CTL_T(PageDown),   Key_Z,    Key_X,    Key_C, Key_V, Key_B, Key_LAlt,
+                               OSM(LeftControl),  Key_BkSp, Key_LGui, OSM(LeftShift),
                                ShiftToLayer(FUNCTION),
 
                                Key_PrtSc,   Key_6, Key_7, Key_8,     Key_9,      Key_0,         Key_Minus,
@@ -163,10 +125,10 @@ KEYMAPS(
                               ___, ___, ___, ___,
                               ___),
 
-    [FUNCTION] = KEYMAP_STACKED(___,      Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_LEDNext,
-                                ___,      ___,    ___,    ___,    ___,    ___,    ___,
-                                Key_Home, ___,    ___,    ___,    ___,    ___,
-                                Key_End,  ___,    ___,    ___,    ___,    ___,    ___,
+    [FUNCTION] = KEYMAP_STACKED(___,      Key_F1,       Key_F2,       Key_F3,       Key_F4,       Key_F5,         Key_LEDNext,
+                                ___,      LCTRL(Key_Q), LCTRL(Key_W), LCTRL(Key_E), LCTRL(Key_R), LCTRL(Key_T),   ___,
+                                Key_Home, LCTRL(Key_A), LCTRL(Key_S), LCTRL(Key_D), LCTRL(Key_F), LCTRL(Key_G),
+                                Key_End,  LCTRL(Key_Z), LCTRL(Key_X), LCTRL(Key_C), LCTRL(Key_V), LCTRL(Key_B),   ___,
                                 ___, Key_Delete, ___, ___,
                                 ___,
 
@@ -345,9 +307,6 @@ KALEIDOSCOPE_INIT_PLUGINS(
     // and slowly moves the rainbow across your keyboard
     LEDRainbowWaveEffect,
 
-    // LED Rainbow Effect (without wave)
-    LEDRainbowEffect,
-
     // These static effects turn your keyboard's LEDs a variety of colors
     //solidRed, solidOrange, solidYellow, solidGreen, solidBlue, solidIndigo, solidViolet,
     solidIndigo,
@@ -361,9 +320,6 @@ KALEIDOSCOPE_INIT_PLUGINS(
 
     // The macros plugin adds support for macros
     Macros,
-
-    // The MouseKeys plugin lets you add keys to your keymap which move the mouse.
-    MouseKeys,
 
     // The HostPowerManagement plugin allows us to turn LEDs off when then host
     // goes to sleep, and resume them when it wakes up.
