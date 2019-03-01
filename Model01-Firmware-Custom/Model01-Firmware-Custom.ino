@@ -177,36 +177,22 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 }
 
 
-// These 'solid' color effect definitions define a rainbow of
-// LED color modes calibrated to draw 500mA or less on the
-// Keyboardio Model 01.
-
-static kaleidoscope::LEDSolidColor solidRed(160, 0, 0);
-static kaleidoscope::LEDSolidColor solidOrange(140, 70, 0);
-static kaleidoscope::LEDSolidColor solidYellow(130, 100, 0);
-static kaleidoscope::LEDSolidColor solidGreen(0, 160, 0);
-static kaleidoscope::LEDSolidColor solidBlue(0, 70, 130);
-static kaleidoscope::LEDSolidColor solidIndigo(0, 0, 170);
-static kaleidoscope::LEDSolidColor solidViolet(130, 0, 120);
-
 /** toggleLedsOnSuspendResume toggles the LEDs off when the host goes to sleep,
  * and turns them back on when it wakes up.
  */
-void toggleLedsOnSuspendResume(kaleidoscope::HostPowerManagement::Event event)
-{
-  switch (event)
-  {
-  case kaleidoscope::HostPowerManagement::Suspend:
-    LEDControl.paused = true;
-    LEDControl.set_all_leds_to({0, 0, 0});
-    LEDControl.syncLeds();
-    break;
-  case kaleidoscope::HostPowerManagement::Resume:
-    LEDControl.paused = false;
-    LEDControl.refreshAll();
-    break;
-  case kaleidoscope::HostPowerManagement::Sleep:
-    break;
+void toggleLedsOnSuspendResume(kaleidoscope::HostPowerManagement::Event event) {
+  switch (event) {
+    case kaleidoscope::HostPowerManagement::Suspend:
+      LEDControl.paused = true;
+      LEDControl.set_all_leds_to({0, 0, 0});
+      LEDControl.syncLeds();
+      break;
+    case kaleidoscope::HostPowerManagement::Resume:
+      LEDControl.paused = false;
+      LEDControl.refreshAll();
+      break;
+    case kaleidoscope::HostPowerManagement::Sleep:
+      break;
   }
 }
 
@@ -214,8 +200,7 @@ void toggleLedsOnSuspendResume(kaleidoscope::HostPowerManagement::Event event)
  * resume, and sleep) to other functions that perform action based on these
  * events.
  */
-void hostPowerManagementEventHandler(kaleidoscope::HostPowerManagement::Event event)
-{
+void hostPowerManagementEventHandler(kaleidoscope::HostPowerManagement::Event event) {
   toggleLedsOnSuspendResume(event);
 }
 
@@ -226,10 +211,8 @@ void hostPowerManagementEventHandler(kaleidoscope::HostPowerManagement::Event ev
  * These are the names of your magic combos. They will be used by the
  * `USE_MAGIC_COMBOS` call below.
  */
-enum
-{
-  // Toggle between Boot (6-key rollover; for BIOSes and early boot) and NKRO
-  // mode.
+enum {
+  // Toggle between Boot (6-key rollover; for BIOSes and early boot) and NKRO mode.
   COMBO_TOGGLE_NKRO_MODE
 };
 
@@ -243,8 +226,7 @@ static void toggleKeyboardProtocol(uint8_t combo_index) {
 
 /* A "reset" of sorts. */
 static void doubleFnCombo(uint8_t combo_index) {
-  LockLayer(FUNCTION);
-  LEDControl.refreshAll();
+  //LockLayer(FUNCTION);
 }
 
 /** Magic combo list, a list of key combo and action pairs the firmware should
@@ -256,6 +238,18 @@ USE_MAGIC_COMBOS({.action = toggleKeyboardProtocol,
                  {.action = doubleFnCombo,
                   // Left Fn + Right Fn
                   .keys = {R3C6, R3C9}});
+
+// These 'solid' color effect definitions define a rainbow of
+// LED color modes calibrated to draw 500mA or less on the
+// Keyboardio Model 01.
+
+static kaleidoscope::LEDSolidColor solidRed(160, 0, 0);
+static kaleidoscope::LEDSolidColor solidOrange(140, 70, 0);
+static kaleidoscope::LEDSolidColor solidYellow(130, 100, 0);
+static kaleidoscope::LEDSolidColor solidGreen(0, 160, 0);
+static kaleidoscope::LEDSolidColor solidBlue(0, 70, 130);
+static kaleidoscope::LEDSolidColor solidIndigo(0, 0, 170);
+static kaleidoscope::LEDSolidColor solidViolet(130, 0, 120);
 
 // First, tell Kaleidoscope which plugins you want to use.
 // The order can be important. For example, LED effects are
@@ -282,13 +276,12 @@ KALEIDOSCOPE_INIT_PLUGINS(
     // LEDControl provides support for other LED modes
     LEDControl,
 
+    // These static effects turn your keyboard's LEDs a variety of colors
+    //solidRed, solidOrange, solidYellow, solidGreen, solidBlue, solidIndigo, solidViolet,
+
     // The rainbow wave effect lights up your keyboard with all the colors of a rainbow
     // and slowly moves the rainbow across your keyboard
     LEDRainbowWaveEffect,
-
-    // These static effects turn your keyboard's LEDs a variety of colors
-    //solidRed, solidOrange, solidYellow, solidGreen, solidBlue, solidIndigo, solidViolet,
-    solidGreen, solidBlue, solidIndigo, solidViolet,
 
     // The numpad plugin is responsible for lighting up the 'numpad' mode
     // with a custom LED effect
@@ -317,8 +310,9 @@ KALEIDOSCOPE_INIT_PLUGINS(
     USBQuirks,
 
     // LEDActiveLayerColorEffect and ActiveModColor
-    LEDActiveLayerColorEffect,
-    ActiveModColorEffect);
+    ActiveModColorEffect,
+    LEDActiveLayerColorEffect
+);
 
 /** The 'setup' function is one of the two standard Arduino sketch functions.
  * It's called when your keyboard first powers up. This is where you set up
@@ -326,8 +320,9 @@ KALEIDOSCOPE_INIT_PLUGINS(
  */
 void setup() {
   static const cRGB layerColormap[] PROGMEM = {
-    CRGB(128, 0, 0),
-    CRGB(0, 128, 0)
+    CRGB(0, 0, 170),
+    CRGB(0, 0, 0), // off (use highlight of NumPad plugin)
+    CRGB(130, 100, 0)
   };
 
   // First, call Kaleidoscope's internal setup function
@@ -353,8 +348,11 @@ void setup() {
   // by using the `settings.defaultLayer` Focus command.
   EEPROMKeymap.setup(5, EEPROMKeymap.Mode::EXTEND);
 
+  //ActiveModColorEffect.sticky_color = CRGB(0x00, 0xff, 0x00); // bright green
+
   // https://github.com/keyboardio/Kaleidoscope/blob/master/examples/LEDs/LED-ActiveLayerColor/LED-ActiveLayerColor.ino
   LEDActiveLayerColorEffect.setColormap(layerColormap);
+  LEDActiveLayerColorEffect.activate();
 }
 
 /** loop is the second of the standard Arduino sketch functions.
