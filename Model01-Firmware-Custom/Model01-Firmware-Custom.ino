@@ -3,7 +3,7 @@
 // See "LICENSE" for license details
 
 #ifndef BUILD_INFORMATION
-#define BUILD_INFORMATION "locally built"
+#define BUILD_INFORMATION "<https://github.com/willwm/layouts-model01>"
 #endif
 
 /**
@@ -52,8 +52,9 @@
 enum
 {
   MACRO_VERSION_INFO,
-  MACRO_LED_NEXT,
-  MACRO_ANY
+  MACRO_TOGGLE_QUKEYS,
+  MACRO_ONESHOT_CANCEL,
+  MACRO_ONESHOT_CTRLALT
 };
 
 /**
@@ -92,6 +93,11 @@ enum
 #define Key_CtrlAltUp   LCTRL(LALT(Key_UpArrow))
 #define Key_CtrlAltDn   LCTRL(LALT(Key_DownArrow))
 
+#define M_Qukeys        M(MACRO_TOGGLE_QUKEYS)
+#define M_Version       M(MACRO_VERSION_INFO)
+#define M_OSCancel      M(MACRO_ONESHOT_CANCEL)
+#define M_OSCtrlAlt     M(MACRO_ONESHOT_CTRLALT)
+
 /* This comment temporarily turns off astyle's indent enforcement
  *   so we can make the keymaps actually resemble the physical key layout better
  */
@@ -99,19 +105,19 @@ enum
 
 KEYMAPS(
 
-    [PRIMARY] = KEYMAP_STACKED(Key_Escape, Key_1, Key_2, Key_3, Key_4, Key_5, M(MACRO_LED_NEXT),
+    [PRIMARY] = KEYMAP_STACKED(Key_Escape, Key_1, Key_2, Key_3, Key_4, Key_5, Key_Del,
                                Key_Grave, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
                                SFT_T(PageUp), Key_A, Key_S, Key_D, Key_F, Key_G,
-                               CTL_T(PageDown), Key_Z, Key_X, Key_C, Key_V, Key_B, Key_LAlt,
+                               CTL_T(PageDown), Key_Z, Key_X, Key_C, Key_V, Key_B, OSM(LeftAlt),
                                OSM(LeftControl), Key_BkSp, Key_LGui, OSM(LeftShift),
-                               ShiftToLayer(FUNCTION),
+                               OSL(FUNCTION),
 
-                               LEAD(0), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
+                               Key_BkSp, Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
                                Key_Enter, Key_Y, Key_U, Key_I, Key_O, Key_P, Key_Equals,
                                Key_H, Key_J, Key_K, Key_L, Key_Semicolon, SFT_T(Quote),
                                Key_RGui, Key_N, Key_M, Key_Comma, Key_Period, Key_Slash, SFT_T(Minus),
                                OSM(RightShift), OSM(RightAlt), Key_Space, OSM(RightControl),
-                               ShiftToLayer(FUNCTION)),
+                               OSL(FUNCTION)),
 
     [NUMPAD] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
                               ___, ___, ___, ___, ___, ___, ___,
@@ -127,48 +133,23 @@ KEYMAPS(
                               ___, ___, ___, ___,
                               ___),
 
-    [FUNCTION] = KEYMAP_STACKED(___,      Key_F1,     Key_F2, Key_F3, Key_F4, Key_F5, Key_LEDNext,
-                                ___,      ___,        ___,    ___,    ___,    ___,    ___,
-                                Key_Home, ___,        ___,    ___,    ___,    ___,
-                                Key_End,  Key_PrtSc,  ___,    ___,    ___,    ___,    ___,
+    [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_BkSp,
+                                Key_LEDNext, M_Qukeys, ___, ___, ___, ___, ___,
+                                Key_Home, ___, ___, ___, ___, ___,
+                                Key_End, Key_PrtSc, Key_Cut, Key_Copy, Key_Paste, M_OSCancel, M_OSCtrlAlt,
                                 ___, ___, ___, ___,
                                 ___,
 
-                                Key_BkSp, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, LockLayer(NUMPAD),
-                                ___, Key_CtrlAltUp, Key_LCurly, Key_RCurly, Key_LBracket, Key_RBracket, Key_F11,
+                                Key_Del, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, LockLayer(NUMPAD),
+                                ___, Key_Home, Key_LCurly, Key_RCurly, Key_LBracket, Key_RBracket, Key_F11,
                                 Key_LeftArrow, Key_DnArrow, Key_UpArrow, Key_RightArrow, ___, Key_F12,
-                                ___, Key_CtrlAltDn, Key_Mute, Key_VolDn, Key_VolUp, Key_Backslash, Key_Pipe,
+                                ___, Key_End, Key_Mute, Key_VolDn, Key_VolUp, Key_Backslash, Key_Pipe,
                                 ___, ___, ___, ___,
                                 ___)) // KEYMAPS(
 
 /* Re-enable astyle's indent enforcement */
 // *INDENT-ON*
 
-/* Leader-related */
-static void leaderLedNext(uint8_t seq_index) {
-  LEDControl.next_mode();
-}
-
-static void leaderLedPrev(uint8_t seq_index) {
-  LEDControl.prev_mode();
-}
-
-static const kaleidoscope::Leader::dictionary_t leader_dictionary[] PROGMEM =
-    LEADER_DICT(
-        // switching LED effect (leader L)
-        {LEADER_SEQ(LEAD(0), Key_PageUp), leaderLedNext},
-        {LEADER_SEQ(LEAD(0), Key_PageDown), leaderLedPrev});
-
-/** ledEffectMacro
- *  Cycles LED effects
- */
-
-static void ledEffectMacro(uint8_t keyState) {
-  if (keyToggledOn(keyState))
-  {
-    LEDControl.next_mode();
-  }
-}
 
 
 /** versionInfoMacro handles the 'firmware version info' macro
@@ -176,35 +157,16 @@ static void ledEffectMacro(uint8_t keyState) {
  *  prints out the firmware build information as virtual keystrokes
  */
 
-static void versionInfoMacro(uint8_t keyState)
-{
-  if (keyToggledOn(keyState))
-  {
-    Macros.type(PSTR("Keyboardio Model 01 - Kaleidoscope (https://github.com/willwm/layouts-model01) "));
+static void versionInfoMacro(uint8_t keyState) {
+  if (keyToggledOn(keyState)) {
+    LEDControl.set_all_leds_to({130, 100, 0});
+    LEDControl.syncLeds();
+
+    Macros.type(PSTR("Keyboardio Model 01 - Kaleidoscope "));
     Macros.type(PSTR(BUILD_INFORMATION));
+
+    LEDControl.refreshAll();
   }
-}
-
-/** anyKeyMacro is used to provide the functionality of the 'Any' key.
- *
- * When the 'any key' macro is toggled on, a random alphanumeric key is
- * selected. While the key is held, the function generates a synthetic
- * keypress event repeating that randomly selected key.
- *
- */
-
-static void anyKeyMacro(uint8_t keyState)
-{
-  static Key lastKey;
-  bool toggledOn = false;
-  if (keyToggledOn(keyState))
-  {
-    lastKey.keyCode = Key_A.keyCode + (uint8_t)(millis() % 36);
-    toggledOn = true;
-  }
-
-  if (keyIsPressed(keyState))
-    kaleidoscope::hid::pressKey(lastKey, toggledOn);
 }
 
 /** macroAction dispatches keymap events that are tied to a macro
@@ -227,17 +189,25 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
       versionInfoMacro(keyState);
       break;
 
-    case MACRO_LED_NEXT:
-      ledEffectMacro(keyState);
+    case MACRO_TOGGLE_QUKEYS:
+      if (keyToggledOn(keyState))
+        Qukeys.toggle();
       break;
 
-    case MACRO_ANY:
-      anyKeyMacro(keyState);
+    case MACRO_ONESHOT_CANCEL:
+      if (keyToggledOn(keyState))
+        OneShot.cancel(true);
+      break;
+
+    case MACRO_ONESHOT_CTRLALT:
+      OneShot.inject(OSM(LeftAlt), keyState);
+      OneShot.inject(OSM(LeftControl), keyState);
       break;
   }
 
   return MACRO_NONE;
 }
+
 
 // These 'solid' color effect definitions define a rainbow of
 // LED color modes calibrated to draw 500mA or less on the
@@ -342,7 +312,7 @@ KALEIDOSCOPE_INIT_PLUGINS(
 
     // These static effects turn your keyboard's LEDs a variety of colors
     //solidRed, solidOrange, solidYellow, solidGreen, solidBlue, solidIndigo, solidViolet,
-    solidIndigo,
+    solidBlue, solidIndigo, solidViolet,
 
     // The numpad plugin is responsible for lighting up the 'numpad' mode
     // with a custom LED effect
@@ -417,7 +387,7 @@ void setup()
   EEPROMKeymap.setup(5, EEPROMKeymap.Mode::EXTEND);
 
   // https://github.com/keyboardio/Kaleidoscope-Leader
-  Leader.dictionary = leader_dictionary;
+  //Leader.dictionary = leader_dictionary;
 }
 
 /** loop is the second of the standard Arduino sketch functions.
