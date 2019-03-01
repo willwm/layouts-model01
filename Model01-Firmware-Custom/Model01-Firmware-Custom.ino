@@ -24,12 +24,11 @@
 #include "Kaleidoscope-OneShot.h"
 #include "Kaleidoscope-Escape-OneShot.h"
 #include "Kaleidoscope-Qukeys.h"
-#include "Kaleidoscope-SpaceCadet.h"
+#include "Kaleidoscope-Leader.h"
 #include "Kaleidoscope-USB-Quirks.h"
 
 #include "Kaleidoscope-LEDControl.h"
 #include "Kaleidoscope-Colormap.h"
-#include "Kaleidoscope-LEDEffect-BootGreeting.h"
 #include "Kaleidoscope-LEDEffect-Breathe.h"
 #include "Kaleidoscope-LEDEffect-Rainbow.h"
 #include "Kaleidoscope-LEDEffect-SolidColor.h"
@@ -94,20 +93,19 @@ enum
 #define Key_CtrlAltUp   LCTRL(LALT(Key_UpArrow))
 #define Key_CtrlAltDn   LCTRL(LALT(Key_DownArrow))
 
-
 KEYMAPS(
 
-    [PRIMARY] = KEYMAP_STACKED(Key_Escape,        Key_1,    Key_2,    Key_3, Key_4, Key_5, Key_Del,
-                               Key_Grave,         Key_Q,    Key_W,    Key_E, Key_R, Key_T, Key_Tab,
-                               SFT_T(PageUp),     Key_A,    Key_S,    Key_D, Key_F, Key_G,
-                               CTL_T(PageDown),   Key_Z,    Key_X,    Key_C, Key_V, Key_B, Key_LAlt,
-                               OSM(LeftControl),  Key_BkSp, Key_LGui, OSM(LeftShift),
+    [PRIMARY] = KEYMAP_STACKED(Key_Escape, Key_1, Key_2, Key_3, Key_4, Key_5, LEAD(0),
+                               Key_Grave, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
+                               SFT_T(PageUp), Key_A, Key_S, Key_D, Key_F, Key_G,
+                               CTL_T(PageDown), Key_Z, Key_X, Key_C, Key_V, Key_B, Key_LAlt,
+                               OSM(LeftControl), Key_BkSp, Key_LGui, OSM(LeftShift),
                                ShiftToLayer(FUNCTION),
 
-                               Key_PrtSc,   Key_6, Key_7, Key_8,     Key_9,      Key_0,         Key_Minus,
-                               Key_Enter,   Key_Y, Key_U, Key_I,     Key_O,      Key_P,         Key_Equals,
-                                            Key_H, Key_J, Key_K,     Key_L,      Key_Semicolon, SFT_T(Quote),
-                               Key_RGui,    Key_N, Key_M, Key_Comma, Key_Period, Key_Slash,     SFT_T(Minus),
+                               Key_Del, Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
+                               Key_Enter, Key_Y, Key_U, Key_I, Key_O, Key_P, Key_Equals,
+                               Key_H, Key_J, Key_K, Key_L, Key_Semicolon, SFT_T(Quote),
+                               Key_RGui, Key_N, Key_M, Key_Comma, Key_Period, Key_Slash, SFT_T(Minus),
                                OSM(RightShift), OSM(RightAlt), Key_Space, OSM(RightControl),
                                ShiftToLayer(FUNCTION)),
 
@@ -118,25 +116,25 @@ KEYMAPS(
                               ___, ___, ___, ___,
                               ___,
 
-                              ___,  ___, Key_Keypad7, Key_Keypad8,     Key_Keypad9,   Key_KeypadSubtract, UnlockLayer(NUMPAD),
-                              ___,  ___, Key_Keypad4, Key_Keypad5,     Key_Keypad6,   Key_KeypadAdd,      Key_KeypadEquals,
-                                    ___, Key_Keypad1, Key_Keypad2,     Key_Keypad3,   Key_KeypadMultiply, Key_Insert,
-                              ___,  ___, Key_Keypad0, ___,             ___,           Key_KeypadDivide,   Key_Enter,
+                              ___, ___, Key_Keypad7, Key_Keypad8, Key_Keypad9, Key_KeypadSubtract, UnlockLayer(NUMPAD),
+                              ___, ___, Key_Keypad4, Key_Keypad5, Key_Keypad6, Key_KeypadAdd, Key_KeypadEquals,
+                              ___, Key_Keypad1, Key_Keypad2, Key_Keypad3, Key_KeypadMultiply, Key_Insert,
+                              ___, ___, Key_Keypad0, ___, ___, Key_KeypadDivide, Key_Enter,
                               ___, ___, ___, ___,
                               ___),
 
-    [FUNCTION] = KEYMAP_STACKED(___,      Key_F1,       Key_F2,       Key_F3,       Key_F4,       Key_F5,         Key_LEDNext,
-                                ___,      LCTRL(Key_Q), LCTRL(Key_W), LCTRL(Key_E), LCTRL(Key_R), LCTRL(Key_T),   ___,
-                                Key_Home, LCTRL(Key_A), LCTRL(Key_S), LCTRL(Key_D), LCTRL(Key_F), LCTRL(Key_G),
-                                Key_End,  LCTRL(Key_Z), LCTRL(Key_X), LCTRL(Key_C), LCTRL(Key_V), LCTRL(Key_B),   ___,
-                                ___, Key_Delete, ___, ___,
+    [FUNCTION] = KEYMAP_STACKED(___,      Key_F1,     Key_F2, Key_F3, Key_F4, Key_F5, Key_LEDNext,
+                                ___,      ___,        ___,    ___,    ___,    ___,    ___,
+                                Key_Home, ___,        ___,    ___,    ___,    ___,
+                                Key_End,  Key_PrtSc,  ___,    ___,    ___,    ___,    ___,
+                                ___, ___, ___, ___,
                                 ___,
 
-                                Key_LEDPrev,  Key_F6,         Key_F7,       Key_F8,       Key_F9,           Key_F10,        LockLayer(NUMPAD),
-                                ___,          Key_CtrlAltUp,  Key_LCurly,   Key_RCurly,   Key_LBracket,     Key_RBracket,   Key_F11,
-                                              Key_LeftArrow,  Key_DnArrow,  Key_UpArrow,  Key_RightArrow,   ___,            Key_F12,
-                                ___,          Key_CtrlAltDn,  Key_Mute,     Key_VolDn,    Key_VolUp,        Key_Backslash,  Key_Pipe,
-                                ___, ___, Key_Enter, ___,
+                                Key_BkSp, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, LockLayer(NUMPAD),
+                                ___, Key_CtrlAltUp, Key_LCurly, Key_RCurly, Key_LBracket, Key_RBracket, Key_F11,
+                                Key_LeftArrow, Key_DnArrow, Key_UpArrow, Key_RightArrow, ___, Key_F12,
+                                ___, Key_CtrlAltDn, Key_Mute, Key_VolDn, Key_VolUp, Key_Backslash, Key_Pipe,
+                                ___, ___, ___, ___,
                                 ___)) // KEYMAPS(
 
 /* Re-enable astyle's indent enforcement */
@@ -320,6 +318,9 @@ KALEIDOSCOPE_INIT_PLUGINS(
 
     // The macros plugin adds support for macros
     Macros,
+
+    // Leader plugin
+    Leader,
 
     // The HostPowerManagement plugin allows us to turn LEDs off when then host
     // goes to sleep, and resume them when it wakes up.
