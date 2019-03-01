@@ -86,6 +86,7 @@ enum
 #define Key_LEDNext     Key_LEDEffectNext
 #define Key_LEDPrev     Key_LEDEffectPrevious
 
+#define Key_CtrlAlt     LCTRL(Key_LeftAlt)
 #define Key_CtrlAltUp   LCTRL(LALT(Key_UpArrow))
 #define Key_CtrlAltDn   LCTRL(LALT(Key_DownArrow))
 
@@ -113,7 +114,7 @@ KEYMAPS(
                                OSM(RightShift), OSM(RightAlt), Key_Space, OSM(RightControl),
                                OSL(FUNCTION)),
 
-    [NUMPAD] = KEYMAP_STACKED(Key_Esc, ___, ___, ___, ___, ___, ___,
+    [NUMPAD] = KEYMAP_STACKED(M_OSCancel, ___, ___, ___, ___, ___, ___,
                               ___, ___, ___, ___, ___, ___, ___,
                               ___, ___, ___, ___, ___, ___,
                               ___, ___, ___, ___, ___, ___, Key_Esc,
@@ -130,7 +131,7 @@ KEYMAPS(
     [FUNCTION] = KEYMAP_STACKED(Key_Esc, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_BkSp,
                                 Key_LEDNext, ___, ___, ___, ___, ___, ___,
                                 Key_Home, ___, ___, ___, ___, ___,
-                                Key_End, Key_PrtSc, Key_Cut, Key_Copy, Key_Paste, M_OSCancel, ___,
+                                Key_End, Key_PrtSc, Key_Cut, Key_Copy, Key_Paste, Key_CtrlAlt, ___,
                                 ___, ___, ___, ___,
                                 ___,
 
@@ -235,9 +236,15 @@ enum
  * This simply toggles the keyboard protocol via USBQuirks, and wraps it within
  * a function with an unused argument, to match what MagicCombo expects.
  */
-static void toggleKeyboardProtocol(uint8_t combo_index)
-{
+static void toggleKeyboardProtocol(uint8_t combo_index) {
   USBQuirks.toggleKeyboardProtocol();
+}
+
+/* A "reset" of sorts. */
+static void doubleFnCombo(uint8_t combo_index) {
+  OneShot.cancel(true);
+  LockLayer(PRIMARY);
+  LEDControl.refreshAll();
 }
 
 /** Magic combo list, a list of key combo and action pairs the firmware should
@@ -245,7 +252,10 @@ static void toggleKeyboardProtocol(uint8_t combo_index)
  */
 USE_MAGIC_COMBOS({.action = toggleKeyboardProtocol,
                   // Left Fn + Esc + Shift
-                  .keys = {R3C6, R2C6, R3C7}});
+                  .keys = {R3C6, R2C6, R3C7}},
+                 {.action = doubleFnCombo,
+                  // Left Fn + Right Fn
+                  .keys = {R3C6, R3C9}});
 
 // First, tell Kaleidoscope which plugins you want to use.
 // The order can be important. For example, LED effects are
