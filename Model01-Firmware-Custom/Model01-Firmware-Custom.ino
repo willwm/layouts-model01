@@ -70,11 +70,24 @@ enum
   FUNCTION
 }; // layers
 
-/* This comment temporarily turns off astyle's indent enforcement
- *   so we can make the keymaps actually resemble the physical key layout better
- */
-// *INDENT-OFF*
+/* Leader-related */
+static void leaderLedNext(uint8_t seq_index) {
+  kaleidoscope::hid::pressKey(Key_LEDEffectNext);
+}
 
+static void leaderLedPrev(uint8_t seq_index) {
+  kaleidoscope::hid::pressKey(Key_LEDEffectPrevious);
+}
+
+
+static const kaleidoscope::Leader::dictionary_t leader_dictionary[] PROGMEM =
+    LEADER_DICT(
+        // switching LED effect (leader L)
+        {LEADER_SEQ(LEAD(0), Key_L, Key_PageUp), leaderLedNext},
+        {LEADER_SEQ(LEAD(0), Key_L, Key_PageDown), leaderLedPrev}
+    );
+
+/* Key Aliases */
 #define Key_Grave       Key_Backtick
 #define Key_PrtSc       Key_PrintScreen
 #define Key_Del         Key_Delete
@@ -92,6 +105,11 @@ enum
 
 #define Key_CtrlAltUp   LCTRL(LALT(Key_UpArrow))
 #define Key_CtrlAltDn   LCTRL(LALT(Key_DownArrow))
+
+/* This comment temporarily turns off astyle's indent enforcement
+ *   so we can make the keymaps actually resemble the physical key layout better
+ */
+// *INDENT-OFF*
 
 KEYMAPS(
 
@@ -380,6 +398,9 @@ void setup()
   // one wants to use these layers, just set the default layer to one in EEPROM,
   // by using the `settings.defaultLayer` Focus command.
   EEPROMKeymap.setup(5, EEPROMKeymap.Mode::EXTEND);
+
+  // https://github.com/keyboardio/Kaleidoscope-Leader
+  Leader.dictionary = leader_dictionary;
 }
 
 /** loop is the second of the standard Arduino sketch functions.
