@@ -52,6 +52,7 @@
 enum
 {
   MACRO_VERSION_INFO,
+  MACRO_LED_NEXT,
   MACRO_ANY
 };
 
@@ -70,22 +71,7 @@ enum
   FUNCTION
 }; // layers
 
-/* Leader-related */
-static void leaderLedNext(uint8_t seq_index) {
-  kaleidoscope::hid::pressKey(Key_LEDEffectNext);
-}
 
-static void leaderLedPrev(uint8_t seq_index) {
-  kaleidoscope::hid::pressKey(Key_LEDEffectPrevious);
-}
-
-
-static const kaleidoscope::Leader::dictionary_t leader_dictionary[] PROGMEM =
-    LEADER_DICT(
-        // switching LED effect (leader L)
-        {LEADER_SEQ(LEAD(0), Key_L, Key_PageUp), leaderLedNext},
-        {LEADER_SEQ(LEAD(0), Key_L, Key_PageDown), leaderLedPrev}
-    );
 
 /* Key Aliases */
 #define Key_Grave       Key_Backtick
@@ -113,14 +99,14 @@ static const kaleidoscope::Leader::dictionary_t leader_dictionary[] PROGMEM =
 
 KEYMAPS(
 
-    [PRIMARY] = KEYMAP_STACKED(Key_Escape, Key_1, Key_2, Key_3, Key_4, Key_5, LEAD(0),
+    [PRIMARY] = KEYMAP_STACKED(Key_Escape, Key_1, Key_2, Key_3, Key_4, Key_5, M(MACRO_LED_NEXT),
                                Key_Grave, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
                                SFT_T(PageUp), Key_A, Key_S, Key_D, Key_F, Key_G,
                                CTL_T(PageDown), Key_Z, Key_X, Key_C, Key_V, Key_B, Key_LAlt,
                                OSM(LeftControl), Key_BkSp, Key_LGui, OSM(LeftShift),
                                ShiftToLayer(FUNCTION),
 
-                               Key_Del, Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
+                               LEAD(0), Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
                                Key_Enter, Key_Y, Key_U, Key_I, Key_O, Key_P, Key_Equals,
                                Key_H, Key_J, Key_K, Key_L, Key_Semicolon, SFT_T(Quote),
                                Key_RGui, Key_N, Key_M, Key_Comma, Key_Period, Key_Slash, SFT_T(Minus),
@@ -157,6 +143,33 @@ KEYMAPS(
 
 /* Re-enable astyle's indent enforcement */
 // *INDENT-ON*
+
+/* Leader-related */
+static void leaderLedNext(uint8_t seq_index) {
+  LEDControl.next_mode();
+}
+
+static void leaderLedPrev(uint8_t seq_index) {
+  LEDControl.prev_mode();
+}
+
+static const kaleidoscope::Leader::dictionary_t leader_dictionary[] PROGMEM =
+    LEADER_DICT(
+        // switching LED effect (leader L)
+        {LEADER_SEQ(LEAD(0), Key_PageUp), leaderLedNext},
+        {LEADER_SEQ(LEAD(0), Key_PageDown), leaderLedPrev});
+
+/** ledEffectMacro
+ *  Cycles LED effects
+ */
+
+static void ledEffectMacro(uint8_t keyState) {
+  if (keyToggledOn(keyState))
+  {
+    LEDControl.next_mode();
+  }
+}
+
 
 /** versionInfoMacro handles the 'firmware version info' macro
  *  When a key bound to the macro is pressed, this macro
@@ -210,15 +223,19 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState)
 {
   switch (macroIndex)
   {
+    case MACRO_VERSION_INFO:
+      versionInfoMacro(keyState);
+      break;
 
-  case MACRO_VERSION_INFO:
-    versionInfoMacro(keyState);
-    break;
+    case MACRO_LED_NEXT:
+      ledEffectMacro(keyState);
+      break;
 
-  case MACRO_ANY:
-    anyKeyMacro(keyState);
-    break;
+    case MACRO_ANY:
+      anyKeyMacro(keyState);
+      break;
   }
+
   return MACRO_NONE;
 }
 
