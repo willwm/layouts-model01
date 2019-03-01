@@ -30,6 +30,7 @@
 #include "Kaleidoscope-LEDEffect-Breathe.h"
 #include "Kaleidoscope-LEDEffect-Rainbow.h"
 #include "Kaleidoscope-LEDEffect-SolidColor.h"
+#include "Kaleidoscope-LED-ActiveLayerColor.h"
 #include "Kaleidoscope-LED-ActiveModColor.h"
 #include "Kaleidoscope-LED-Palette-Theme.h"
 #include "Kaleidoscope-LED-Stalker.h"
@@ -114,9 +115,9 @@ KEYMAPS(
                                OSM(RightShift), OSM(RightAlt), Key_Space, OSM(RightControl),
                                OSL(FUNCTION)),
 
-    [NUMPAD] = KEYMAP_STACKED(M_OSCancel, ___, ___, ___, ___, ___, ___,
-                              ___, ___, ___, ___, ___, ___, ___,
-                              ___, ___, ___, ___, ___, ___,
+    [NUMPAD] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
+                              ___, ___, Key_Home, Key_UpArrow, Key_End, ___, ___,
+                              ___, ___, Key_LArrow, Key_DnArrow, Key_RArrow, ___,
                               ___, ___, ___, ___, ___, ___, Key_Esc,
                               ___, ___, ___, ___,
                               ___,
@@ -128,8 +129,8 @@ KEYMAPS(
                               ___, ___, ___, ___,
                               ___),
 
-    [FUNCTION] = KEYMAP_STACKED(Key_Esc, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_BkSp,
-                                Key_LEDNext, ___, ___, ___, ___, ___, ___,
+    [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_BkSp,
+                                Key_LEDNext, M_OSCancel, ___, ___, ___, ___, ___,
                                 Key_Home, ___, ___, ___, ___, ___,
                                 Key_End, Key_PrtSc, Key_Cut, Key_Copy, Key_Paste, Key_CtrlAlt, ___,
                                 ___, ___, ___, ___,
@@ -242,8 +243,7 @@ static void toggleKeyboardProtocol(uint8_t combo_index) {
 
 /* A "reset" of sorts. */
 static void doubleFnCombo(uint8_t combo_index) {
-  OneShot.cancel(true);
-  LockLayer(PRIMARY);
+  LockLayer(FUNCTION);
   LEDControl.refreshAll();
 }
 
@@ -316,7 +316,8 @@ KALEIDOSCOPE_INIT_PLUGINS(
     // by BIOSes) and Report (NKRO).
     USBQuirks,
 
-    // https://github.com/keyboardio/Kaleidoscope-LED-ActiveModColor
+    // LEDActiveLayerColorEffect and ActiveModColor
+    LEDActiveLayerColorEffect,
     ActiveModColorEffect);
 
 /** The 'setup' function is one of the two standard Arduino sketch functions.
@@ -324,6 +325,10 @@ KALEIDOSCOPE_INIT_PLUGINS(
  * Kaleidoscope and any plugins.
  */
 void setup() {
+  static const cRGB layerColormap[] PROGMEM = {
+    CRGB(128, 0, 0),
+    CRGB(0, 128, 0)
+  };
 
   // First, call Kaleidoscope's internal setup function
   Kaleidoscope.setup();
@@ -347,6 +352,9 @@ void setup() {
   // one wants to use these layers, just set the default layer to one in EEPROM,
   // by using the `settings.defaultLayer` Focus command.
   EEPROMKeymap.setup(5, EEPROMKeymap.Mode::EXTEND);
+
+  // https://github.com/keyboardio/Kaleidoscope/blob/master/examples/LEDs/LED-ActiveLayerColor/LED-ActiveLayerColor.ino
+  LEDActiveLayerColorEffect.setColormap(layerColormap);
 }
 
 /** loop is the second of the standard Arduino sketch functions.
