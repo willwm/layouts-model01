@@ -104,8 +104,8 @@ KEYMAPS(
     [PRIMARY] = KEYMAP_STACKED(Key_Esc, Key_1, Key_2, Key_3, Key_4, Key_5, Key_Del,
                                Key_Grave, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
                                Key_PageUp, Key_A, Key_S, Key_D, Key_F, Key_G,
-                               Key_PageDown, Key_Z, Key_X, Key_C, Key_V, Key_B, OSM(LeftAlt),
-                               OSM(LeftControl), Key_BkSp, Key_LGui, OSM(LeftShift),
+                               Key_PageDown, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Esc,
+                               OSM(LeftControl), Key_BkSp, OSM(LGui), OSM(LeftShift),
                                OSL(FUNCTION),
 
                                Key_BkSp, Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
@@ -124,7 +124,7 @@ KEYMAPS(
 
                               ___, ___, Key_Keypad7, Key_Keypad8, Key_Keypad9, Key_KeypadSubtract, UnlockLayer(NUMPAD),
                               ___, ___, Key_Keypad4, Key_Keypad5, Key_Keypad6, Key_KeypadAdd, Key_KeypadEquals,
-                              ___, Key_Keypad1, Key_Keypad2, Key_Keypad3, Key_KeypadMultiply, Key_Insert,
+                                   ___, Key_Keypad1, Key_Keypad2, Key_Keypad3, Key_KeypadMultiply, Key_Insert,
                               ___, ___, Key_Keypad0, ___, ___, Key_KeypadDivide, Key_Enter,
                               ___, ___, ___, ___,
                               ___),
@@ -133,13 +133,13 @@ KEYMAPS(
                                 Key_LEDNext, M_OSCancel, ___, ___, ___, ___, ___,
                                 Key_Home, ___, ___, ___, ___, ___,
                                 Key_End, Key_PrtSc, Key_Cut, Key_Copy, Key_Paste, Key_CtrlAlt, ___,
-                                ___, ___, ___, ___,
+                                ___, Key_Del, ___, ___,
                                 ___,
 
                                 Key_Del, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, LockLayer(NUMPAD),
                                 ___, Key_Home, Key_LCurly, Key_RCurly, Key_LBracket, Key_RBracket, Key_F11,
-                                Key_LeftArrow, Key_DnArrow, Key_UpArrow, Key_RightArrow, ___, Key_F12,
-                                ___, Key_End, Key_Mute, Key_VolDn, Key_VolUp, Key_Backslash, Key_Pipe,
+                                     Key_LeftArrow, Key_DnArrow, Key_UpArrow, Key_RightArrow, ___, Key_F12,
+                                ___, Key_Home, Key_PageDown, Key_PageUp, Key_End, Key_Backslash, Key_Pipe,
                                 ___, ___, ___, ___,
                                 ___)) // KEYMAPS(
 
