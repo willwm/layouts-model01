@@ -52,6 +52,8 @@ enum
 {
   MACRO_VERSION_INFO,
   MACRO_ONESHOT_CANCEL,
+  MACRO_ONESHOT_CTRL_ALT,
+  MACRO_ONESHOT_CTRL_ALT_WIN
 };
 
 /**
@@ -93,6 +95,8 @@ enum
 
 #define M_Version       M(MACRO_VERSION_INFO)
 #define M_OSCancel      M(MACRO_ONESHOT_CANCEL)
+#define M_CtrlAlt       M(MACRO_ONESHOT_CTRL_ALT)
+#define M_CtrlAltWin    M(MACRO_ONESHOT_CTRL_ALT)
 
 /* This comment temporarily turns off astyle's indent enforcement
  *   so we can make the keymaps actually resemble the physical key layout better
@@ -101,18 +105,18 @@ enum
 
 KEYMAPS(
 
-    [PRIMARY] = KEYMAP_STACKED(Key_Esc, Key_1, Key_2, Key_3, Key_4, Key_5, Key_Del,
+    [PRIMARY] = KEYMAP_STACKED(Key_Esc, Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDNext,
                                Key_Grave, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
                                Key_PageUp, Key_A, Key_S, Key_D, Key_F, Key_G,
                                Key_PageDown, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Esc,
-                               OSM(LeftControl), Key_BkSp, OSM(LGui), OSM(LeftShift),
+                               Key_LCtrl, Key_BkSp, Key_LGui, OSM(LeftShift),
                                OSL(FUNCTION),
 
-                               Key_BkSp, Key_6, Key_7, Key_8, Key_9, Key_0, Key_Minus,
+                               Key_PrtSc, Key_6, Key_7, Key_8, Key_9, Key_0, Key_Del,
                                Key_Enter, Key_Y, Key_U, Key_I, Key_O, Key_P, Key_Equals,
                                Key_H, Key_J, Key_K, Key_L, Key_Semicolon, Key_Quote,
                                Key_RGui, Key_N, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Minus,
-                               OSM(RightShift), OSM(RightAlt), Key_Space, OSM(RightControl),
+                               OSM(RightShift), Key_RAlt, Key_Space, Key_RCtrl,
                                OSL(FUNCTION)),
 
     [NUMPAD] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
@@ -129,18 +133,18 @@ KEYMAPS(
                               ___, ___, ___, ___,
                               ___),
 
-    [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_BkSp,
+    [FUNCTION] = KEYMAP_STACKED(LockLayer(FUNCTION), Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, ___,
                                 Key_LEDNext, M_OSCancel, ___, ___, ___, ___, ___,
-                                Key_Home, ___, ___, ___, ___, ___,
-                                Key_End, Key_PrtSc, Key_Cut, Key_Copy, Key_Paste, Key_CtrlAlt, ___,
-                                ___, Key_Del, ___, ___,
+                                Key_Home, ___, ___, ___, M_CtrlAltWin, ___,
+                                Key_End, Key_PrtSc, Key_Cut, Key_Copy, Key_Paste, M_CtrlAlt, ___,
+                                OSM(LeftControl), Key_Del, OSM(LGui), ___,
                                 ___,
 
-                                Key_Del, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, LockLayer(NUMPAD),
+                                ___, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, LockLayer(NUMPAD),
                                 ___, Key_Home, Key_LCurly, Key_RCurly, Key_LBracket, Key_RBracket, Key_F11,
                                      Key_LeftArrow, Key_DnArrow, Key_UpArrow, Key_RightArrow, ___, Key_F12,
                                 ___, Key_Home, Key_PageDown, Key_PageUp, Key_End, Key_Backslash, Key_Pipe,
-                                ___, ___, ___, ___,
+                                ___, OSM(RightAlt), ___, OSM(RightControl),
                                 ___)) // KEYMAPS(
 
 /* Re-enable astyle's indent enforcement */
@@ -164,6 +168,21 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
       if (keyToggledOn(keyState)) {
         Macros.type(PSTR("Keyboardio Model 01 - Kaleidoscope "));
         Macros.type(PSTR(BUILD_INFORMATION));
+      }
+      break;
+
+    case MACRO_ONESHOT_CTRL_ALT:
+      if (keyToggledOn(keyState)) {
+        OneShot.inject(OSM(LeftAlt), keyState);
+        OneShot.inject(OSM(LeftControl), keyState);
+      }
+      break;
+
+    case MACRO_ONESHOT_CTRL_ALT_WIN:
+      if (keyToggledOn(keyState)) {
+        OneShot.inject(OSM(LeftAlt), keyState);
+        OneShot.inject(OSM(LeftControl), keyState);
+        OneShot.inject(OSM(LeftGui), keyState);
       }
       break;
 
@@ -213,7 +232,8 @@ void hostPowerManagementEventHandler(kaleidoscope::HostPowerManagement::Event ev
  */
 enum {
   // Toggle between Boot (6-key rollover; for BIOSes and early boot) and NKRO mode.
-  COMBO_TOGGLE_NKRO_MODE
+  COMBO_TOGGLE_NKRO_MODE,
+  COMBO_DOUBLE_FN
 };
 
 /** A tiny wrapper, to be used by MagicCombo.
@@ -349,6 +369,9 @@ void setup() {
   EEPROMKeymap.setup(5, EEPROMKeymap.Mode::EXTEND);
 
   //ActiveModColorEffect.sticky_color = CRGB(0x00, 0xff, 0x00); // bright green
+
+  OneShot.double_tap_sticky = false;
+  OneShot.double_tap_sticky_layers = false;
 
   // https://github.com/keyboardio/Kaleidoscope/blob/master/examples/LEDs/LED-ActiveLayerColor/LED-ActiveLayerColor.ino
   LEDActiveLayerColorEffect.setColormap(layerColormap);
