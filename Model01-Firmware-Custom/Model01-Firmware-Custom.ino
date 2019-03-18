@@ -91,6 +91,9 @@ enum
 #define Key_Amp         LSHIFT(Key_7)
 #define Key_Star        LSHIFT(Key_8)
 #define Key_Colon       LSHIFT(Key_Semicolon)
+#define Key_LT          LSHIFT(Key_Comma)
+#define Key_GT          LSHIFT(Key_Period)
+#define Key_QMark       LSHIFT(Key_Slash)
 
 #define Key_Mute        Consumer_Mute
 #define Key_VolUp       Consumer_VolumeIncrement
@@ -115,14 +118,14 @@ enum
 
 KEYMAPS(
 
-    [PRIMARY] = KEYMAP_STACKED(LockLayer(FUNCTION), Key_1, Key_2, Key_3, Key_4, Key_5, Key_Del,
+    [PRIMARY] = KEYMAP_STACKED(LockLayer(FUNCTION), Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDNext,
                                Key_Grave, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
                                Key_PageUp, Key_A, Key_S, Key_D, Key_F, Key_G,
                                Key_PageDown, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Esc,
-                               Key_LCtrl, Key_BkSp, Key_LAlt, Key_LeftShift,
+                               Key_LCtrl, Key_BkSp, Key_LAlt, OSM(LeftShift),
                                ShiftToLayer(FUNCTION),
 
-                               Key_BkSp, Key_6, Key_7, Key_8, Key_9, Key_0, LockLayer(NUMPAD),
+                               Key_Del, Key_6, Key_7, Key_8, Key_9, Key_0, LockLayer(NUMPAD),
                                Key_Enter, Key_Y, Key_U, Key_I, Key_O, Key_P, Key_Equals,
                                Key_H, Key_J, Key_K, Key_L, Key_Semicolon, Key_Quote,
                                Key_LGui, Key_N, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Minus,
@@ -130,13 +133,13 @@ KEYMAPS(
                                ShiftToLayer(FUNCTION)),
 
     [NUMPAD] = KEYMAP_STACKED(___, ___, ___, ___, ___, ___, ___,
-                              ___, ___, Key_Home, Key_UpArrow, Key_End, ___, ___,
+                              ___, ___, ___, Key_UpArrow, ___, ___, ___,
                               ___, ___, Key_LArrow, Key_DnArrow, Key_RArrow, ___,
                               ___, ___, ___, ___, ___, ___, ___,
                               ___, ___, ___, ___,
                               ___,
 
-                              ___, ___, Key_Keypad7, Key_Keypad8, Key_Keypad9, Key_KeypadSubtract, UnlockLayer(NUMPAD),
+                              ___, ___, Key_Keypad7, Key_Keypad8, Key_Keypad9, Key_KeypadSubtract, ___,
                               ___, ___, Key_Keypad4, Key_Keypad5, Key_Keypad6, Key_KeypadAdd, Key_KeypadEquals,
                                    ___, Key_Keypad1, Key_Keypad2, Key_Keypad3, Key_KeypadMultiply, Key_Insert,
                               ___, ___, Key_Keypad0, Key_Comma, Key_Period, Key_KeypadDivide, Key_Enter,
@@ -144,13 +147,13 @@ KEYMAPS(
                               ___),
 
     [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, ___,
-                                Key_PrtSc, Key_VolUp, Key_Carat, Key_LCurly, Key_RCurly, Key_Tilde, ___,
-                                Key_Home, Key_VolDn, Key_Amp, Key_LParen, Key_RParen, Key_Colon,
-                                Key_End, Key_Mute, Key_Star, Key_LBracket, Key_LBracket, Key_Insert, ___,
+                                Key_PrtSc, Key_VolUp, Key_Slash, Key_LCurly, Key_RCurly, Key_Backslash, ___,
+                                Key_Home, Key_VolDn, Key_LT, Key_LParen, Key_RParen, Key_GT,
+                                Key_End, Key_Mute, Key_QMark, Key_LBracket, Key_RBracket, Key_Pipe, ___,
                                 ___, Key_Del, ___, ___,
                                 ___,
 
-                                Key_Del, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_BkSp,
+                                Key_BkSp, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_Del,
                                 ___, Key_Tab, Key_LCurly, Key_RCurly, Key_LBracket, Key_RBracket, Key_F11,
                                      Key_LeftArrow, Key_DnArrow, Key_UpArrow, Key_RightArrow, Key_Colon, Key_F12,
                                 ___, Key_Home, Key_PageDown, Key_PageUp, Key_End, Key_Backslash, Key_Pipe,
@@ -228,7 +231,8 @@ static void toggleKeyboardProtocol(uint8_t combo_index) {
 
 /* A "reset" of sorts. */
 static void doubleFnCombo(uint8_t combo_index) {
-  LockLayer(FUNCTION);
+  //LockLayer(FUNCTION);
+  Layer.activate(FUNCTION);
 }
 
 /** Magic combo list, a list of key combo and action pairs the firmware should
@@ -299,9 +303,6 @@ void setup() {
     CRGB(130, 100, 0)
   };
 
-  OneShot.double_tap_sticky = false;
-
-
   // First, call Kaleidoscope's internal setup function
   Kaleidoscope.setup();
 
@@ -324,6 +325,8 @@ void setup() {
   // one wants to use these layers, just set the default layer to one in EEPROM,
   // by using the `settings.defaultLayer` Focus command.
   EEPROMKeymap.setup(5, EEPROMKeymap.Mode::EXTEND);
+
+  OneShot.double_tap_sticky = false;
 
   LEDActiveLayerColorEffect.setColormap(layerColormap);
   LEDActiveLayerColorEffect.activate();
