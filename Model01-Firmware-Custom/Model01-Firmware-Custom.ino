@@ -118,14 +118,14 @@ enum
 
 KEYMAPS(
 
-    [PRIMARY] = KEYMAP_STACKED(LockLayer(FUNCTION), Key_1, Key_2, Key_3, Key_4, Key_5, Key_LEDNext,
+    [PRIMARY] = KEYMAP_STACKED(LockLayer(FUNCTION), Key_1, Key_2, Key_3, Key_4, Key_5, Key_Del,
                                Key_Grave, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
                                Key_PageUp, Key_A, Key_S, Key_D, Key_F, Key_G,
                                Key_PageDown, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Esc,
                                Key_LCtrl, Key_BkSp, Key_LAlt, OSM(LeftShift),
                                ShiftToLayer(FUNCTION),
 
-                               Key_Del, Key_6, Key_7, Key_8, Key_9, Key_0, LockLayer(NUMPAD),
+                               Key_BkSp, Key_6, Key_7, Key_8, Key_9, Key_0, LockLayer(NUMPAD),
                                Key_Enter, Key_Y, Key_U, Key_I, Key_O, Key_P, Key_Equals,
                                Key_H, Key_J, Key_K, Key_L, Key_Semicolon, Key_Quote,
                                Key_LGui, Key_N, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Minus,
@@ -146,14 +146,14 @@ KEYMAPS(
                               ___, ___, ___, ___,
                               ___),
 
-    [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, ___,
+    [FUNCTION] = KEYMAP_STACKED(___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_LEDNext,
                                 Key_PrtSc, Key_VolUp, Key_Slash, Key_LCurly, Key_RCurly, Key_Backslash, ___,
                                 Key_Home, Key_VolDn, Key_LT, Key_LParen, Key_RParen, Key_GT,
                                 Key_End, Key_Mute, Key_QMark, Key_LBracket, Key_RBracket, Key_Pipe, ___,
-                                ___, Key_Del, ___, ___,
+                                ___, ___, ___, ___,
                                 ___,
 
-                                Key_BkSp, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_Del,
+                                ___, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_Del,
                                 ___, Key_Tab, Key_LCurly, Key_RCurly, Key_LBracket, Key_RBracket, Key_F11,
                                      Key_LeftArrow, Key_DnArrow, Key_UpArrow, Key_RightArrow, Key_Colon, Key_F12,
                                 ___, Key_Home, Key_PageDown, Key_PageUp, Key_End, Key_Backslash, Key_Pipe,
@@ -249,13 +249,13 @@ USE_MAGIC_COMBOS({.action = toggleKeyboardProtocol,
 // LED color modes calibrated to draw 500mA or less on the
 // Keyboardio Model 01.
 
-static kaleidoscope::LEDSolidColor solidRed(160, 0, 0);
-static kaleidoscope::LEDSolidColor solidOrange(140, 70, 0);
-static kaleidoscope::LEDSolidColor solidYellow(130, 100, 0);
-static kaleidoscope::LEDSolidColor solidGreen(0, 160, 0);
-static kaleidoscope::LEDSolidColor solidBlue(0, 70, 130);
-static kaleidoscope::LEDSolidColor solidIndigo(0, 0, 170);
-static kaleidoscope::LEDSolidColor solidViolet(130, 0, 120);
+// static kaleidoscope::LEDSolidColor solidRed(160, 0, 0);
+// static kaleidoscope::LEDSolidColor solidOrange(140, 70, 0);
+// static kaleidoscope::LEDSolidColor solidYellow(130, 100, 0);
+// static kaleidoscope::LEDSolidColor solidGreen(0, 160, 0);
+// static kaleidoscope::LEDSolidColor solidBlue(0, 70, 130);
+// static kaleidoscope::LEDSolidColor solidIndigo(0, 0, 170);
+// static kaleidoscope::LEDSolidColor solidViolet(130, 0, 120);
 
 // First, tell Kaleidoscope which plugins you want to use.
 // The order can be important. For example, LED effects are
@@ -326,7 +326,7 @@ void setup() {
   // by using the `settings.defaultLayer` Focus command.
   EEPROMKeymap.setup(5, EEPROMKeymap.Mode::EXTEND);
 
-  OneShot.double_tap_sticky = false;
+  //OneShot.double_tap_sticky = false;
 
   LEDActiveLayerColorEffect.setColormap(layerColormap);
   LEDActiveLayerColorEffect.activate();
